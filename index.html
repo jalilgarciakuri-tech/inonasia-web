@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INONASIA | AI Logistics & Inspection</title>
+    <!-- Fuentes Industriales -->
+    <link href="https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --plata-brillante: #FFFFFF;
+            --plata-metalico: #C0C0C0;
+            --plata-oscuro: #222222;
+            --negro-puro: #000000;
+            --negro-tarjeta: #080808;
+            --glow: rgba(255, 255, 255, 0.4);
+            --stencil: 'Stardos Stencil', serif;
+            --tech: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--negro-puro);
+            color: var(--plata-metalico);
+            font-family: var(--tech);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: rgba(0, 0, 0, 0.98);
+            border-bottom: 1px solid var(--plata-oscuro);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 12px 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo-header img {
+            height: 60px; /* Tamaño solicitado */
+            width: auto;
+            display: block;
+        }
+
+        nav { display: flex; gap: 25px; align-items: center; }
+        nav a {
+            color: var(--plata-metalico);
+            text-decoration: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active { color: var(--plata-brillante); text-shadow: 0 0 10px var(--glow); }
+
+        .btn-trial-nav {
+            background: var(--plata-brillante);
+            color: var(--negro-puro);
+            padding: 8px 18px;
+            font-family: var(--stencil);
+            font-size: 11px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* --- SPA SYSTEM --- */
+        .page { display: none; padding-top: 110px; min-height: 100vh; }
+        .page.active { display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+
+        h1, h2, h3, h4 { font-family: var(--stencil); color: var(--plata-brillante); text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px var(--glow); }
+        h1 { font-size: 3.2rem; line-height: 1.1; margin-bottom: 20px; }
+        h2 { font-size: 2.2rem; border-left: 5px solid var(--plata-brillante); padding-left: 20px; margin-bottom: 30px; }
+
+        .photo-bw { width: 100%; filter: grayscale(100%) contrast(1.2); border: 1px solid var(--plata-oscuro); object-fit: cover; transition: 0.5s; }
+        .photo-bw:hover { filter: grayscale(0%); }
+        
+        .card { background: var(--negro-tarjeta); border: 1px solid var(--plata-oscuro); padding: 40px; margin-bottom: 20px; }
+
+        /* --- HERO --- */
+        .hero { height: 80vh; display: flex; align-items: center; background: url('photo3.jpg') center/cover; position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #000 45%, transparent 100%); }
+        .hero-content { position: relative; z-index: 10; max-width: 650px; }
+
+        .btn-main {
+            display: inline-block;
+            background: var(--plata-brillante);
+            color: var(--negro-puro);
+            padding: 18px 45px;
+            text-decoration: none;
+            font-family: var(--stencil);
+            font-weight: bold;
+            margin-top: 30px;
+            border: 1px solid var(--plata-brillante);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-main:hover { background: transparent; color: var(--plata-brillante); box-shadow: 0 0 30px var(--glow); }
+
+        /* Stats Strip */
+        .stats-strip { background: var(--plata-brillante); color: var(--negro-puro); padding: 40px 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; max-width: 1200px; margin: 0 auto; }
+        .stat-item h3 { color: var(--negro-puro); font-size: 2.2rem; text-shadow: none; margin-bottom: 5px; }
+        .stat-item p { font-size: 10px; font-weight: bold; letter-spacing: 2px; }
+
+        /* Layout de Filas */
+        .service-row { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 100px; }
+        .service-row.reverse { direction: rtl; }
+        .service-row.reverse .service-text { direction: ltr; }
+        .service-list { list-style: none; margin-top: 20px; }
+        .service-list li { margin-bottom: 12px; padding-left: 25px; position: relative; color: var(--plata-metalico); }
+        .service-list li::before { content: '>'; position: absolute; left: 0; color: var(--plata-brillante); font-weight: bold; }
+
+        /* --- FOOTER COMPACTO --- */
+        footer {
+            background: #000;
+            padding: 60px 0 20px;
+            border-top: 2px solid var(--plata-brillante);
+            margin-top: 80px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .footer-logo-box img { max-width: 200px; height: auto; margin-bottom: 15px; display: block; }
+        .footer-col h4 { font-size: 0.9rem; margin-bottom: 20px; color: var(--plata-brillante); }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; font-size: 0.85rem; }
+        .footer-col ul li a { color: var(--plata-metalico); text-decoration: none; transition: 0.3s; cursor: pointer; }
+        .footer-col ul li a:hover { color: var(--plata-brillante); }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #111;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #444;
+        }
+
+        .wa-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #FFFFFF;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .service-row { grid-template-columns: 1fr; gap: 30px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a class="logo-header" onclick="showPage('inicio')">
+            <img src="logo-header.jpg" alt="INONASIA">
+        </a>
+        <nav>
+            <a onclick="showPage('inicio')" id="nav-inicio" class="active">Inicio</a>
+            <a onclick="showPage('servicios')" id="nav-servicios">Servicios</a>
+            <a onclick="showPage('red')" id="nav-red">Red</a>
+            <button class="btn-trial-nav" onclick="showPage('contacto')">PRUEBA GRATIS</button>
+        </nav>
+    </div>
+</header>
+
+<!-- SECCIÓN INICIO -->
+<div id="inicio" class="page active">
+    <!-- HERO (photo3.jpg) -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>AI PARA TU <br>LOGÍSTICA</h1>
+                <h3 style="color: #888; margin-bottom: 20px;">DESDE EL NÚCLEO Y ORIGEN</h3>
+                <p>INSPECCIONA Y COORDINA ENVÍOS DE PRODUCTOS DESDE CUALQUIER LUGAR.</p>
+                <a onclick="showPage('contacto')" class="btn-main">PRUEBA GRATIS</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- COBERTURA (photo3.jpg) -->
+    <section class="container">
+        <div class="service-row">
+            <div class="service-text">
+                <h2>INFRAESTRUCTURA Y COBERTURA ASIA</h2>
+                <p style="font-size: 1.1rem; color: #fff;">MÁS DE 150 INSPECTORES CAPACITADOS EN TODOS LOS PAÍSES DE ASIA.</p>
+                <p style="margin-top: 20px;">Capacidad de ajuste a sus necesidades y las de sus proveedores con garantía y validez aduanal.</p>
+                <a onclick="showPage('red')" style="display:inline-block; margin-top:20px; color:#fff; text-decoration:underline; cursor:pointer; font-size: 12px; letter-spacing: 1px;">CONSULTE LA RED DE INONASIA</a>
+            </div>
+            <img src="photo6.jpg" alt="Asia Infrastructure" class="photo-bw" style="height: 400px;">
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-strip">
+        <div class="stats-grid">
+            <div class="stat-item"><h3>3</h3><p>OFICINAS</p></div>
+            <div class="stat-item"><h3>12</h3><p>PAÍSES</p></div>
+            <div class="stat-item"><h3>150</h3><p>INSPECTORES</p></div>
+            <div class="stat-item"><h3>100K</h3><p>INSPECCIONES</p></div>
+        </div>
+    </section>
+
+    <!-- PROFESIONALISMO (photo5.jpg) -->
+    <section class="container">
+        <div class="service-row reverse">
+            <div class="service-text">
+                <h2>PROFESIONAL, RÁPIDO Y EFECTIVO</h2>
+                <p style="margin-top: 20px; font-size: 1.1rem; color: #ccc;">Blindaje quirúrgico de su cadena de suministro. Comunicación activa al <span style="color:#fff;">99.9% en tiempo real</span> para mitigar riesgos.</p>
+                <a onclick="showPage('contacto')" class="btn-main">PROBAR GRATIS</a>
+            </div>
+            <img src="photo5.jpg" alt="Excellence" class="photo-bw" style="height: 400px;">
+        </div>
+    </section>
+
+    <!-- TECNOLOGÍA AI (photo4.jpg) -->
+    <section class="container">
+        <div class="service-row">
+            <img src="photo4.jpg" alt="AI Tech" class="photo-bw" style="height: 350px;">
+            <div class="service-text">
+                <h2>TECNOLOGÍA AI PARA LOGÍSTICA</h2>
+                <p>Erradicamos el factor-error humano mediante sistemas de soporte IA integrados en cada fase de inspección y comunicación.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AGENDA EN POCOS MINUTOS -->
+    <section class="container">
+        <h2 style="text-align: center; margin-bottom: 50px;">AGENDA EN POCOS MINUTOS</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div class="card">
+                <h4>1. CONTACTO</h4>
+                <p>Contacte a un representante Inonasia hoy.</p>
+            </div>
+            <div class="card">
+                <h4>2. INSTRUCCIONES</h4>
+                <p>Envíe y confirme sus requerimientos técnicos.</p>
+            </div>
+            <div class="card">
+                <h4>3. COTIZACIÓN</h4>
+                <p>Reciba y confirme su presupuesto inmediato.</p>
+            </div>
+            <div class="card">
+                <h4>4. NOTIFICACIÓN</h4>
+                <p>Monitoreo de su inversión en tiempo real.</p>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 30px; font-weight: bold; color: #fff;">DESPREOCÚPESE. NOSOTROS LO MANTENEMOS INFORMADO.</p>
+    </section>
+
+    <!-- PLANES -->
+    <section class="container">
+        <div style="border: 2px dashed #444; padding: 60px; text-align: center;">
+            <h2>PLANES FLEXIBLES</h2>
+            <p>Servicios de inspección técnica</p>
+            <h3 style="font-size: 4rem; color: #fff; margin: 15px 0;">$199 <span style="font-size: 1.5rem;">USD</span></h3>
+            <a onclick="showPage('contacto')" class="btn-main">COMENZAR GRATIS</a>
+        </div>
+    </section>
+</div>
+
+<!-- SECCIÓN SERVICIOS DETALLADA -->
+<div id="servicios" class="page">
+    <div class="container">
+        <h1 style="margin-bottom: 80px; text-align: center;">PORTAFOLIO DE <span style="color:#777;">SERVICIOS</span></h1>
+        
+        <!-- 1. Previo (photo1.jpg) -->
+        <div class="service-row">
+            <div class="service-text">
+                <h3>1. PREVIO EN ORIGEN / INSPECCIÓN DE CARGA</h3>
+                <p style="color:#fff;">Verificación técnica antes del cierre del contenedor.</p>
+                <ul class="service-list">
+                    <li>Coincidencia al 100% con orden de compra.</li>
+                    <li>Cumplimiento con NOMs y autoridades aduaneras.</li>
+                    <li>Reducción de 24-48 horas en despacho aduanal.</li>
+                    <li>Eliminación de riesgos de robo y faltantes.</li>
+                </ul>
+            </div>
+            <img src="photo1.jpg" alt="Inspeccion Carga" class="photo-bw" style="height: 400px;">
+        </div>
+
+        <!-- 2. Calidad (photo2.jpg) -->
+        <div class="service-row reverse">
+            <div class="service-text">
+                <h3>2. INSPECCIÓN DE CALIDAD</h3>
+                <p style="color:#fff;">Muestreo aleatorio bajo estándares ISO 2859 (AQL).</p>
+                <ul class="service-list">
+                    <li>Acciones correctivas en origen inmediatas.</li>
+                    <li>Supervisión de mejoras con el proveedor.</li>
+                    <li>Reportes técnicos IA de defectos catalogados.</li>
+                </ul>
+            </div>
+            <img src="photo2.jpg" alt="Calidad" class="photo-bw" style="height: 400px;">
+        </div>
+
+        <!-- 3. Auditoria (photo4.jpg) -->
+        <div class="service-row">
+            <div class="service-text">
+                <h3>3. AUDITORÍA DE FÁBRICA</h3>
+                <p style="color:#fff;">Validación de infraestructura y capacidad legal.</p>
+                <ul class="service-list">
+                    <li>Registro fotográfico de licencias y certificados.</li>
+                    <li>Validación de líneas de producción y almacenes.</li>
+                    <li>Verificación de procesos bajo registros locales.</li>
+                </ul>
+            </div>
+            <img src="photo4.jpg" alt="Auditoria" class="photo-bw" style="height: 400px;">
+        </div>
+
+        <!-- 4. Aduanas (photo7.jpg) -->
+        <div class="service-row reverse">
+            <div class="service-text">
+                <h3>4. DESPACHO ADUANAL Y CONSULTORÍA</h3>
+                <p style="color:#fff;">Presencia en 32 aduanas de la República.</p>
+                <ul class="service-list">
+                    <li>Especialistas en reubicación de plantas e instalación.</li>
+                    <li>Hub Laredo: 750,000 pies cuadrados de almacén.</li>
+                    <li>Certificaciones: OEA, CTPAT, ISO 9001.</li>
+                </ul>
+            </div>
+            <img src="photo7.jpg" alt="Aduanas" class="photo-bw" style="height: 400px;">
+        </div>
+
+        <!-- 5. Logistica (photo8.jpg) -->
+        <div class="service-row">
+            <div class="service-text">
+                <h3>5. LOGÍSTICA INTERNACIONAL & LOCAL</h3>
+                <p style="color:#fff;">Conectividad China - México - EUA - Canadá.</p>
+                <ul class="service-list">
+                    <li>Transporte terrestre especializado puerta a puerta.</li>
+                    <li>Tarifas preferenciales con navieras globales.</li>
+                    <li>Servicio de Crossdock y administración de inventarios.</li>
+                </ul>
+            </div>
+            <img src="photo8.jpg" alt="Logistica" class="photo-bw" style="height: 400px;">
+        </div>
+    </div>
+</div>
+
+<!-- SECCIÓN RED -->
+<div id="red" class="page">
+    <div class="container">
+        <h2>RED OPERATIVA <span style="color:#777;">GLOBAL</span></h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+            <div class="card" style="border-left: 4px solid #fff;">
+                <h3>HUBS ESTRATÉGICOS</h3>
+                <p style="color:#fff; font-weight: bold;">• SHENZHEN, CHINA</p>
+                <p style="color:#fff; font-weight: bold;">• CDMX, MÉXICO</p>
+                <p style="font-size: 0.8rem; margin-top: 15px;">Tamaulipas 141 piso 3B, Condesa,<br>Cuauhtémoc, 06140 CDMX</p>
+            </div>
+            <div class="card" style="border-left: 4px solid #555;">
+                <h3>OFICINAS REGIONALES</h3>
+                <p>• VIETNAM (HANOI)</p>
+                <p>• INDIA (MUMBAI)</p>
+                <p style="font-size: 0.8rem; margin-top: 15px;">T: +52 55 5104 1645<br>E: info@inonasia.com</p>
+            </div>
+        </div>
+        <img src="photo8.jpg" alt="Red" class="photo-bw" style="height: 400px; width:100%; margin-top: 30px;">
+    </div>
+</div>
+
+<!-- SECCIÓN CONTACTO -->
+<div id="contacto" class="page">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px;">
+            <div>
+                <h2>PRUEBA <br><span style="color:#777;">SIN COSTO</span></h2>
+                <p>Inicie su diagnóstico operativo hoy mismo asistido por nuestra tecnología AI.</p>
+            </div>
+            <div class="card">
+                <form onsubmit="event.preventDefault(); alert('Solicitud enviada.');">
+                    <label style="display:block; margin-bottom:8px; font-size:10px;">NOMBRE COMPLETO</label>
+                    <input type="text" required style="width:100%; background:#000; border:1px solid #333; padding:15px; color:#fff; margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-size:10px;">MENSAJE / REQUERIMIENTO</label>
+                    <textarea rows="4" required style="width:100%; background:#000; border:1px solid #333; padding:15px; color:#fff; margin-bottom:20px;"></textarea>
+                    <button type="submit" class="btn-main" style="width:100%; border:none;">SOLICITAR AHORA</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container" style="padding: 0 20px;">
+        <div class="footer-grid">
+            <div class="footer-logo-box">
+                <img src="logo-footer.jpg" alt="INONASIA">
+                <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">Blindaje operativo y calidad en origen.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a onclick="showPage('inicio')">Inicio</a></li>
+                    <li><a onclick="showPage('servicios')">Servicios</a></li>
+                    <li><a onclick="showPage('red')">Red Operativa</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Cobertura</h4>
+                <ul>
+                    <li>China / México</li>
+                    <li>Vietnam / India</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Social</h4>
+                <ul>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 INONASIA. TODOS LOS DERECHOS RESERVADOS.</div>
+            <div>AI SUPPLY CHAIN TECH</div>
+        </div>
+    </div>
+</footer>
+
+<a href="https://wa.me/525551041645" class="wa-float" target="_blank">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<script>
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+        const target = document.getElementById(pageId);
+        if (target) {
+            target.classList.add('active');
+            const navLink = document.getElementById('nav-' + pageId);
+            if (navLink) navLink.classList.add('active');
+        }
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
+
+</body>
+</html>
